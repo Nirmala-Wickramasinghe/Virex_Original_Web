@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VIREX Memory Solutions — high-performance SSD, DDR5 RAM, SD cards and portable storage built for speed.">
+    <meta name="theme-color" content="#07080c">
+    <title>VIREX | Performance Memory Solutions</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Michroma&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --black: #050609;
+            --dark: #080a0f;
+            --panel: #0d1017;
+            --panel-2: #11151d;
+            --white: #f7f8fa;
+            --muted: #a3a9b6;
+            --red: #ff1e1e;
+            --red-dark: #bd0000;
+            --line: rgba(255,255,255,.09);
+            --glass: rgba(8,10,15,.68);
+            --max: 1240px;
+            --ease: cubic-bezier(.2,.75,.2,1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        body {
+            background:
+                radial-gradient(circle at 15% 10%, rgba(255,30,30,.08), transparent 28%),
+                radial-gradient(circle at 85% 45%, rgba(255,30,30,.05), transparent 30%),
+                var(--black);
+            color: var(--white);
+            font-family: Inter, sans-serif;
+            overflow-x: hidden;
+        }
+        body.menu-open { overflow: hidden; }
+        a { color: inherit; text-decoration: none; }
+        img { display: block; max-width: 100%; }
+        button { font: inherit; }
+        ::selection { background: var(--red); color: #fff; }
+
+        /* ---------- Ambient tech background ---------- */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -3;
+            opacity: .25;
+            background-image:
+                linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: linear-gradient(to bottom, #000, transparent 85%);
+        }
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            opacity: .035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+        }
+        .orb {
+            position: fixed;
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: -1;
+            opacity: .13;
+        }
+        .orb.one { background: var(--red); left: -180px; top: 28%; }
+        .orb.two { background: #5b0dff; right: -190px; top: 62%; }
+
+        /* ---------- Preloader ---------- */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: grid;
+            place-items: center;
+            background: var(--black);
+            transition: opacity .6s ease, visibility .6s ease;
+        }
+        #preloader.hidden { opacity: 0; visibility: hidden; }
+        .loader-inner { text-align: center; }
+        .loader-ring {
+            width: 74px;
+            height: 74px;
+            margin: auto;
+            border: 2px solid rgba(255,255,255,.08);
+            border-top-color: var(--red);
+            border-right-color: var(--red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .loader-text {
+            margin-top: 22px;
+            font: 11px Michroma, sans-serif;
+            letter-spacing: 5px;
+            color: #fff;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ---------- Navigation ---------- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 78px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            background: rgba(5,6,9,.32);
+            border-bottom: 1px solid rgba(255,255,255,.06);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: background .35s ease, height .35s ease, box-shadow .35s ease;
+        }
+        nav.scrolled {
+            height: 68px;
+            background: rgba(5,6,9,.88);
+            box-shadow: 0 12px 40px rgba(0,0,0,.28);
+        }
+        .logo img { width: auto; height: 42px; }
+        .nav-links { display: flex; gap: 34px; align-items: center; }
+        .nav-links a {
+            position: relative;
+            color: #dfe2e8;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.7px;
+            text-transform: uppercase;
+            transition: color .25s ease;
+        }
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -9px;
+            width: 0;
+            height: 2px;
+            background: var(--red);
+            transition: width .25s ease;
+        }
+        .nav-links a:hover { color: #fff; }
+        .nav-links a:hover::after { width: 100%; }
+
+        .nav-cta {
+            padding: 10px 18px;
+            border: 1px solid rgba(255,30,30,.55);
+            color: #fff !important;
+            background: rgba(255,30,30,.08);
+        }
+        .nav-cta::after { display: none; }
+        .nav-toggle {
+            display: none;
+            width: 43px;
+            height: 43px;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,.04);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .nav-toggle span { width: 21px; height: 2px; background: #fff; transition: .25s; }
+        .nav-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .nav-toggle.active span:nth-child(2) { opacity: 0; }
+        .nav-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* ---------- Hero ---------- */
+        #home {
+            min-height: 100svh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            isolation: isolate;
+        }
+        .hero-video {
+            position: absolute;
+            inset: 0;
+            z-index: -4;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            /* Keep the video on its own compositor layer without animating it. */
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            will-change: transform;
+            /* Avoid an expensive full-screen video filter; the overlay handles the look. */
+            filter: none;
+        }
+        .hero-video-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: -3;
+            background:
+                linear-gradient(90deg, rgba(4,5,8,.96) 0%, rgba(4,5,8,.72) 43%, rgba(4,5,8,.45) 100%),
+                linear-gradient(0deg, rgba(5,6,9,.9) 0%, transparent 32%, rgba(5,6,9,.42) 100%);
+        }
+        .hero-glow {
+            position: absolute;
+            width: 60vw;
+            height: 60vw;
+            max-width: 850px;
+            max-height: 850px;
+            right: -20vw;
+            top: 8%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,20,20,.2), transparent 65%);
+            z-index: -2;
+            pointer-events: none;
+        }
+        .hero-grid {
+            position: absolute;
+            inset: auto 0 0;
+            height: 45%;
+            z-index: -1;
+            opacity: .25;
+            background-image:
+                linear-gradient(rgba(255,30,30,.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,30,30,.12) 1px, transparent 1px);
+            background-size: 55px 55px;
+            transform: perspective(500px) rotateX(55deg) scale(1.4);
+            transform-origin: bottom;
+            mask-image: linear-gradient(to top, #000, transparent);
+        }
+        .hero-content {
+            width: min(var(--max), 90%);
+            padding: 130px 0 80px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #d8dbe2;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+        .eyebrow::before {
+            content: "";
+            width: 30px;
+            height: 2px;
+            background: var(--red);
+            box-shadow: 0 0 14px rgba(255,30,30,.8);
+        }
+        .hero-title {
+            max-width: 900px;
+            font: clamp(3.1rem, 8vw, 7.5rem)/1.02 Michroma, sans-serif;
+            letter-spacing: -3px;
+            text-transform: uppercase;
+        }
+        .hero-title span {
+            color: var(--red);
+            text-shadow: 0 0 35px rgba(255,30,30,.25);
+        }
+        .hero-copy {
+            max-width: 650px;
+            margin: 28px 0 36px;
+            color: #c4c9d3;
+            font-size: clamp(.95rem, 1.4vw, 1.12rem);
+            line-height: 1.85;
+        }
+        .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px;
+            padding: 0 27px;
+            border: 1px solid var(--red);
+            background: var(--red);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: transform .3s var(--ease), box-shadow .3s ease, background .3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 35px rgba(255,30,30,.22);
+        }
+        .btn.ghost {
+            background: rgba(255,255,255,.035);
+            border-color: rgba(255,255,255,.22);
+        }
+        .btn.ghost:hover { border-color: rgba(255,255,255,.55); background: rgba(255,255,255,.07); }
+        .hero-metrics {
+            display: flex;
+            gap: 0;
+            margin-top: 72px;
+            max-width: 760px;
+        }
+        .metric {
+            min-width: 170px;
+            padding: 0 28px;
+            border-left: 1px solid rgba(255,255,255,.15);
+        }
+        .metric:first-child { padding-left: 0; border-left: 0; }
+        .metric strong { display: block; font: 23px Michroma, sans-serif; }
+        .metric span { display: block; margin-top: 7px; color: #969daa; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 28px;
+            left: 5%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #9ca2ae;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .scroll-indicator i {
+            width: 30px;
+            height: 48px;
+            border: 1px solid rgba(255,255,255,.28);
+            border-radius: 20px;
+            position: relative;
+        }
+        .scroll-indicator i::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 9px;
+            width: 3px;
+            height: 8px;
+            background: var(--red);
+            transform: translateX(-50%);
+            animation: wheel 1.5s infinite;
+        }
+        @keyframes wheel {
+            0% { opacity: 0; transform: translate(-50%,0); }
+            30% { opacity: 1; }
+            100% { opacity: 0; transform: translate(-50%,20px); }
+        }
+
+        /* ---------- Common sections ---------- */
+        section { position: relative; padding: 115px 5%; }
+        .container { width: min(var(--max), 100%); margin: auto; }
+        .section-head {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 48px;
+        }
+        .kicker {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--red);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .section-title {
+            font: clamp(2rem, 4vw, 3.7rem)/1.1 Michroma, sans-serif;
+            letter-spacing: -1.5px;
+            text-transform: uppercase;
+        }
+        .section-title span { color: var(--red); }
+        .section-intro {
+            max-width: 510px;
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: .98rem;
+        }
+
+        /* ---------- Brand strip ---------- */
+        .tech-strip {
+            padding: 0 5%;
+            background: #090b10;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+        .tech-strip-inner {
+            width: min(var(--max), 100%);
+            min-height: 82px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .tech-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 13px;
+            border-right: 1px solid var(--line);
+            color: #adb3bf;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .tech-item:last-child { border-right: 0; }
+        .tech-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); box-shadow: 0 0 12px var(--red); }
+
+        /* ---------- Products ---------- */
+        #products { background: linear-gradient(180deg, #080a0f, #050609); overflow: hidden; }
+        .products-window {
+            position: relative;
+            width: 100%;
+        }
+        .products-track {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(330px, 390px);
+            gap: 20px;
+            overflow-x: auto;
+            overscroll-behavior-inline: contain;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            padding: 8px 3px 24px;
+        }
+        .products-track::-webkit-scrollbar { display: none; }
+        .product-card {
+            scroll-snap-align: start;
+            min-height: 535px;
+            display: flex;
+            flex-direction: column;
+            padding: 14px;
+            background: linear-gradient(145deg, #131720, #090b10);
+            border: 1px solid rgba(255,255,255,.08);
+            position: relative;
+            overflow: hidden;
+            transition: transform .35s var(--ease), border-color .35s ease, box-shadow .35s ease;
+        }
+        .product-card::before {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            right: -80px;
+            top: -80px;
+            border-radius: 50%;
+            background: rgba(255,30,30,.12);
+            filter: blur(25px);
+            pointer-events: none;
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255,30,30,.42);
+            box-shadow: 0 24px 60px rgba(0,0,0,.35);
+        }
+        .product-image {
+            height: 300px;
+            width: 100%;
+            background: #f4f4f4;
+            border: 1px solid rgba(0,0,0,.12);
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 24px;
+            transition: transform .5s var(--ease);
+        }
+        .product-card:hover .product-image img { transform: scale(1.055); }
+        .product-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 2;
+            padding: 7px 10px;
+            background: var(--red);
+            color: #fff;
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .product-body { padding: 22px 8px 8px; }
+        .product-number {
+            color: #636a77;
+            font: 10px Michroma, sans-serif;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        .product-title {
+            font-size: 1.2rem;
+            line-height: 1.35;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .product-desc {
+            color: var(--muted);
+            font-size: .88rem;
+            line-height: 1.7;
+            margin-top: 10px;
+        }
+        .product-specs {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .spec {
+            padding: 6px 8px;
+            border: 1px solid var(--line);
+            color: #b8bdc8;
+            font-size: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .slider-controls {
+            display: flex;
+            gap: 9px;
+            margin-top: 10px;
+        }
+        .slider-btn {
+            width: 46px;
+            height: 42px;
+            border: 1px solid var(--line);
+            background: #0c0f15;
+            color: #fff;
+            cursor: pointer;
+            transition: .25s ease;
+        }
+        .slider-btn:hover { background: var(--red); border-color: var(--red); }
+
+        /* ---------- Performance band ---------- */
+        .performance {
+            background:
+                linear-gradient(90deg, rgba(255,30,30,.08), transparent 35%),
+                #090b10;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+        .performance-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 70px;
+            align-items: center;
+        }
+        .performance-copy p {
+            margin-top: 22px;
+            max-width: 620px;
+            color: var(--muted);
+            line-height: 1.9;
+        }
+        .performance-list { display: grid; gap: 13px; }
+        .performance-row {
+            padding: 21px 22px;
+            display: grid;
+            grid-template-columns: 42px 1fr auto;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,.025);
+        }
+        .performance-icon {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(255,30,30,.4);
+            color: var(--red);
+            font-size: 11px;
+            font-weight: 900;
+        }
+        .performance-row strong { font-size: .95rem; }
+        .performance-row span { display: block; margin-top: 4px; color: #777e8b; font-size: .76rem; }
+        .performance-row b { color: #fff; font: 11px Michroma, sans-serif; }
+
+        /* ---------- About ---------- */
+        #about { background: #06070a; }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .about-copy p {
+            color: var(--muted);
+            line-height: 1.9;
+            margin-top: 20px;
+        }
+        .about-copy strong { color: #fff; }
+        .about-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 30px;
+        }
+        .about-card {
+            padding: 21px;
+            background: #0b0e14;
+            border: 1px solid var(--line);
+        }
+        .about-card b { display: block; font-size: .9rem; }
+        .about-card span { display: block; margin-top: 8px; color: #777f8d; font-size: .76rem; line-height: 1.6; }
+        .about-visual {
+            min-height: 510px;
+            position: relative;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            background:
+                radial-gradient(circle, rgba(255,30,30,.12), transparent 36%),
+                linear-gradient(145deg, #11151d, #07080c);
+            border: 1px solid var(--line);
+        }
+        .about-visual::before,
+        .about-visual::after {
+            content: "";
+            position: absolute;
+            border: 1px solid rgba(255,30,30,.22);
+            border-radius: 50%;
+            animation: orbit 22s linear infinite;
+        }
+        .about-visual::before { width: 300px; height: 300px; }
+        .about-visual::after { width: 440px; height: 440px; animation-direction: reverse; animation-duration: 30s; border-color: rgba(255,255,255,.07); }
+        .about-visual img {
+            width: min(62%, 360px);
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 20px 45px rgba(0,0,0,.45));
+        }
+        @keyframes orbit { to { transform: rotate(360deg); } }
+
+        /* ---------- CTA ---------- */
+        .cta {
+            padding-top: 90px;
+            padding-bottom: 90px;
+            background:
+                radial-gradient(circle at 50% 100%, rgba(255,30,30,.16), transparent 42%),
+                #080a0f;
+        }
+        .cta-box {
+            position: relative;
+            overflow: hidden;
+            padding: 70px 7%;
+            text-align: center;
+            border: 1px solid rgba(255,30,30,.28);
+            background:
+                linear-gradient(135deg, rgba(255,30,30,.08), rgba(255,255,255,.02)),
+                #0b0e14;
+        }
+        .cta-box::before {
+            content: "VIREX";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            color: rgba(255,255,255,.025);
+            font: 15vw Michroma, sans-serif;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .cta-box > * { position: relative; z-index: 1; }
+        .cta-box h2 { font: clamp(1.9rem, 4vw, 3.6rem) Michroma, sans-serif; }
+        .cta-box p { max-width: 620px; margin: 20px auto 30px; color: var(--muted); line-height: 1.8; }
+
+        /* ---------- Footer ---------- */
+        footer {
+            padding: 55px 5% 28px;
+            background: #040508;
+            border-top: 1px solid var(--line);
+        }
+        .footer-main {
+            width: min(var(--max), 100%);
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+        footer img { width: auto; height: 38px; }
+        .footer-copy { color: #6f7580; font-size: .78rem; line-height: 1.7; text-align: right; }
+        .footer-bottom {
+            width: min(var(--max), 100%);
+            margin: 35px auto 0;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255,255,255,.05);
+            color: #555b66;
+            font-size: .7rem;
+            text-align: center;
+        }
+
+        /* ---------- Reveal animations ---------- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity .8s var(--ease), transform .8s var(--ease);
+        }
+        .reveal.show { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: .08s; }
+        .delay-2 { transition-delay: .16s; }
+        .delay-3 { transition-delay: .24s; }
+
+
+        /* ---------- VIREX Enhanced Motion System ---------- */
+        .scroll-progress{
+            position:fixed; top:0; left:0; width:0; height:3px;
+            z-index:3000; background:var(--red);
+            box-shadow:0 0 18px rgba(255,30,30,.85);
+        }
+
+        .hero-content.show .eyebrow,
+        .hero-content.show .hero-title,
+        .hero-content.show .hero-copy,
+        .hero-content.show .hero-actions,
+        .hero-content.show .hero-metrics {
+            animation: heroEnter .9s var(--ease) both;
+        }
+        .hero-content.show .hero-title { animation-delay:.08s; }
+        .hero-content.show .hero-copy { animation-delay:.18s; }
+        .hero-content.show .hero-actions { animation-delay:.28s; }
+        .hero-content.show .hero-metrics { animation-delay:.38s; }
+
+        @keyframes heroEnter {
+            from { opacity:0; transform:translateY(28px); }
+            to { opacity:1; transform:translateY(0); }
+        }
+
+        .tech-strip { overflow:hidden; }
+        .tech-strip-inner{
+            min-width:max-content;
+            animation: stripMove 24s linear infinite;
+        }
+        @keyframes stripMove {
+            0% { transform:translateX(0); }
+            100% { transform:translateX(-8%); }
+        }
+
+        .products-window::before,
+        .products-window::after{
+            content:""; position:absolute; top:0; bottom:0; width:70px;
+            z-index:4; pointer-events:none;
+        }
+        .products-window::before{
+            left:0; background:linear-gradient(90deg,#080a0f,transparent);
+        }
+        .products-window::after{
+            right:0; background:linear-gradient(270deg,#080a0f,transparent);
+        }
+
+        .product-card{
+            transform:translateY(0) scale(.98);
+            opacity:.78;
+        }
+        .product-card.is-active{
+            transform:translateY(-8px) scale(1);
+            opacity:1;
+            border-color:rgba(255,30,30,.55);
+            box-shadow:0 26px 70px rgba(0,0,0,.42), 0 0 35px rgba(255,30,30,.08);
+        }
+        .product-card.is-active .product-image img{
+            animation: productFloat 4s ease-in-out infinite;
+        }
+        @keyframes productFloat {
+            0%,100% { transform:translateY(0) scale(1.02); }
+            50% { transform:translateY(-10px) scale(1.05); }
+        }
+
+        .performance-row{
+            transition:transform .35s var(--ease), border-color .35s ease, background .35s ease;
+        }
+        .performance-row:hover{
+            transform:translateX(10px);
+            border-color:rgba(255,30,30,.38);
+            background:rgba(255,30,30,.055);
+        }
+
+        .about-card{
+            transition:transform .35s var(--ease), border-color .35s ease, box-shadow .35s ease;
+        }
+        .about-card:hover{
+            transform:translateY(-6px);
+            border-color:rgba(255,30,30,.4);
+            box-shadow:0 18px 45px rgba(0,0,0,.25);
+        }
+
+        .section-title, .hero-title{
+            text-wrap:balance;
+        }
+
+        .magnetic{
+            transition:transform .22s ease;
+            will-change:transform;
+        }
+
+        @media (max-width:800px){
+            .tech-strip-inner{ animation:none; min-width:100%; }
+            .products-window::before,.products-window::after{ width:25px; }
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 1050px) {
+            .nav-links { gap: 22px; }
+            .hero-content { width: 90%; }
+            .hero-title { max-width: 760px; }
+            .performance-grid { gap: 40px; }
+            .about-grid { gap: 45px; }
+            .product-image { height: 280px; }
+        }
+
+        @media (max-width: 800px) {
+            nav, nav.scrolled { height: 68px; padding: 0 5%; }
+            .logo img { height: 36px; }
+            .nav-toggle { display: flex; }
+            .nav-links {
+                position: fixed;
+                top: 68px;
+                left: 0;
+                right: 0;
+                padding: 12px 5% 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                background: rgba(5,6,9,.97);
+                backdrop-filter: blur(18px);
+                border-bottom: 1px solid var(--line);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-12px);
+                transition: .25s ease;
+            }
+            .nav-links.open { opacity: 1; visibility: visible; transform: translateY(0); }
+            .nav-links a { padding: 16px 3px; border-bottom: 1px solid var(--line); }
+            .nav-links a::after { bottom: 7px; }
+            .nav-cta { margin-top: 10px; text-align: center; }
+            .hero-content { padding: 120px 0 100px; }
+            .hero-title { font-size: clamp(2.5rem, 12vw, 5rem); letter-spacing: -1px; }
+            .hero-metrics { margin-top: 48px; flex-wrap: wrap; row-gap: 22px; }
+            .metric { min-width: 145px; }
+            .tech-strip-inner { grid-template-columns: 1fr 1fr; }
+            .tech-item { min-height: 65px; }
+            .tech-item:nth-child(2) { border-right: 0; }
+            .tech-item:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+            section { padding: 85px 5%; }
+            .section-head { display: block; }
+            .section-intro { margin-top: 20px; }
+            .products-track { grid-auto-columns: minmax(78vw, 360px); }
+            .product-card { min-height: 515px; }
+            .performance-grid, .about-grid { grid-template-columns: 1fr; }
+            .about-visual { min-height: 400px; order: -1; }
+            .footer-main { align-items: flex-start; flex-direction: column; }
+            .footer-copy { text-align: left; }
+        }
+
+        @media (max-width: 520px) {
+            .hero-video { object-position: 60% center; }
+            .hero-video-overlay {
+                background:
+                    linear-gradient(90deg, rgba(4,5,8,.94), rgba(4,5,8,.62)),
+                    linear-gradient(0deg, rgba(5,6,9,.94), transparent 55%);
+            }
+            .hero-copy { font-size: .88rem; line-height: 1.75; }
+            .hero-actions { flex-direction: column; align-items: stretch; max-width: 290px; }
+            .btn { width: 100%; }
+            .hero-metrics { display: grid; grid-template-columns: 1fr 1fr; }
+            .metric { padding: 0 12px; min-width: 0; }
+            .metric:nth-child(3) { grid-column: 1 / -1; }
+            .metric:nth-child(2) { border-left: 1px solid rgba(255,255,255,.15); }
+            .metric strong { font-size: 16px; }
+            .metric span { font-size: 8px; letter-spacing: 1px; }
+            .scroll-indicator { display: none; }
+            .section-title { font-size: 1.85rem; }
+            .products-track { grid-auto-columns: 84vw; gap: 14px; }
+            .product-card { min-height: 500px; padding: 10px; }
+            .product-image { height: 255px; }
+            .product-image img { padding: 20px; }
+            .performance-row { grid-template-columns: 34px 1fr; }
+            .performance-row b { grid-column: 2; }
+            .about-cards { grid-template-columns: 1fr; }
+            .about-visual { min-height: 330px; }
+            .about-visual::before { width: 210px; height: 210px; }
+            .about-visual::after { width: 290px; height: 290px; }
+            .cta-box { padding: 48px 20px; }
+        }
+
+
+        /* ---------- Modern Scroll Experience ---------- */
+        html {
+            scroll-snap-type: y proximity;
+            scroll-padding-top: 78px;
+        }
+
+        body {
+            overscroll-behavior-y: none;
+        }
+
+        main > section {
+            scroll-snap-align: start;
+            scroll-snap-stop: normal;
+        }
+
+        .scroll-progress {
+            transform-origin: left center;
+            transition: width .08s linear;
+        }
+
+        .section-parallax {
+            will-change: transform;
+            transform: translate3d(0, var(--parallax-y, 0px), 0);
+        }
+
+        /* Product slider status */
+        .slider-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            margin-top: 12px;
+        }
+
+        .slider-controls {
+            margin-top: 0;
+            flex: 0 0 auto;
+        }
+
+        .slider-dots {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slider-dot {
+            width: 7px;
+            height: 7px;
+            padding: 0;
+            border: 0;
+            border-radius: 999px;
+            background: rgba(255,255,255,.22);
+            cursor: pointer;
+            transition: width .3s var(--ease), background .3s ease, transform .3s ease;
+        }
+
+        .slider-dot.is-active {
+            width: 28px;
+            background: var(--red);
+            box-shadow: 0 0 14px rgba(255,30,30,.5);
+        }
+
+        .product-card {
+            transition:
+                transform .55s var(--ease),
+                opacity .45s ease,
+                border-color .35s ease,
+                box-shadow .35s ease;
+        }
+
+        @media (max-width: 1200px) {
+            .products-track { grid-auto-columns: minmax(320px, 36vw); }
+            .performance-grid, .about-grid { gap: clamp(35px, 5vw, 70px); }
+        }
+
+        @media (max-width: 900px) {
+            html { scroll-snap-type: none; }
+            .products-track { grid-auto-columns: minmax(300px, 46vw); }
+            .hero-metrics { max-width: 100%; }
+        }
+
+        @media (max-width: 700px) {
+            .slider-footer { gap: 12px; }
+            .products-track {
+                grid-auto-columns: minmax(82vw, 360px);
+                padding-bottom: 18px;
+            }
+            .product-card { min-height: auto; }
+            .product-image { height: clamp(220px, 62vw, 280px); }
+            .product-body { padding: 18px 6px 10px; }
+            .product-desc { font-size: .84rem; }
+            .slider-dots { gap: 6px; }
+        }
+
+        @media (max-width: 420px) {
+            section { padding-left: 4%; padding-right: 4%; }
+            .products-track { grid-auto-columns: 88vw; }
+            .slider-footer { flex-wrap: wrap; }
+            .slider-controls { width: 100%; }
+            .slider-btn { width: calc(50% - 5px); }
+            .hero-title { font-size: clamp(2rem, 11vw, 3.1rem); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+    <div class="noise"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <div id="preloader" aria-hidden="true">
+        <div class="loader-inner">
+            <div class="loader-ring"></div>
+            <div class="loader-text">VIREX // SYSTEM ONLINE</div>
+        </div>
+    </div>
+
+    <nav id="navbar">
+        <a class="logo" href="#home" aria-label="VIREX Home">
+            <img src="Images/virex-wordmark (1).png" alt="VIREX">
+        </a>
+
+        <div class="nav-links" id="navLinks">
+            <a href="#home">Home</a>
+            <a href="#products">Products</a>
+            <a href="#performance">Performance</a>
+            <a href="#about">About</a>
+            <a class="nav-cta" href="#contact">Contact</a>
+        </div>
+
+        <button class="nav-toggle" id="navToggle" aria-label="Open navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main>
+        <!-- HERO: Put your cinematic MP4 at Videos/virex-hero.mp4 -->
+        <section id="home">
+            <video class="hero-video" autoplay muted loop playsinline preload="metadata" disablepictureinpicture
+                   poster="Images/VIREX LOGO.png" aria-hidden="true">
+                <source src="Videos/Virex SD.mp4" type="video/mp4">
+            </video>
+            <div class="hero-video-overlay"></div>
+            <div class="hero-glow"></div>
+            <div class="hero-grid"></div>
+
+            <div class="hero-content reveal">
+                <span class="eyebrow">Next-Generation Memory Technology</span>
+                <h1 class="hero-title">Live <span>Limitless</span></h1>
+                <p class="hero-copy">
+                    Store more. Access faster. VIREX delivers performance-focused memory
+                    and storage solutions for gaming, content creation, high-speed computing
+                    and everyday digital life.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#products" class="btn">Explore Products</a>
+                    <a href="#about" class="btn ghost">Discover VIREX</a>
+                </div>
+
+                <div class="hero-metrics">
+                    <div class="metric">
+                        <strong>SSD</strong>
+                        <span>High-Speed Storage</span>
+                    </div>
+                    <div class="metric">
+                        <strong>DDR5</strong>
+                        <span>Next-Gen Memory</span>
+                    </div>
+                    <div class="metric">
+                        <strong>4K/8K</strong>
+                        <span>Media Ready Storage</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-indicator"><i></i> Scroll to explore</div>
+        </section>
+
+        <div class="tech-strip">
+            <div class="tech-strip-inner">
+                <div class="tech-item"><i class="tech-dot"></i> Performance First</div>
+                <div class="tech-item"><i class="tech-dot"></i> Built for Gamers</div>
+                <div class="tech-item"><i class="tech-dot"></i> Creator Ready</div>
+                <div class="tech-item"><i class="tech-dot"></i> Future Focused</div>
+            </div>
+        </div>
+
+        <!-- PRODUCTS -->
+        <section id="products">
+            <div class="container">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="kicker">VIREX Hardware</span>
+                        <h2 class="section-title">Power Your <span>Next Move</span></h2>
+                    </div>
+                    <p class="section-intro">
+                        Explore a focused lineup of high-performance memory and storage products
+                        designed to keep your system responsive, your workflow moving and your
+                        data within reach.
+                    </p>
+                </div>
+
+                <div class="products-window reveal delay-1">
+                    <div class="products-track" id="productTrack" tabindex="0" aria-label="VIREX product slider">
+
+                        <article class="product-card">
+                            <div class="product-image">
+                                <span class="product-badge">Performance</span>
+                                <img src="Images/NVME.png" alt="VIREX NVMe M.2 SSD" loading="lazy">
+                            </div>
+                            <div class="product-body">
+                                <div class="product-number">01 / STORAGE</div>
+                                <h3 class="product-title">VIREX NVMe M.2 SSD</h3>
+                                <p class="product-desc">Fast storage for responsive boot times, demanding applications, gaming and heavy workloads.</p>
+                                <div class="product-specs">
+                                    <span class="spec">NVMe</span>
+                                    <span class="spec">M.2</span>
+                                    <span class="spec">High Speed</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="product-card">
+                            <div class="product-image">
+                                <span class="product-badge">Creator</span>
+                                <img src="Images/SD Card.png" alt="VIREX PRO SDXC Memory Card" loading="lazy">
+                            </div>
+                            <div class="product-body">
+                                <div class="product-number">02 / FLASH</div>
+                                <h3 class="product-title">VIREX PRO SDXC</h3>
+                                <p class="product-desc">Portable flash storage designed for photography, video capture and demanding everyday transfers.</p>
+                                <div class="product-specs">
+                                    <span class="spec">SDXC</span>
+                                    <span class="spec">4K Ready</span>
+                                    <span class="spec">Portable</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="product-card">
+                            <div class="product-image">
+                                <span class="product-badge">Gaming</span>
+                                <img src="Images/Virex Ram.png" alt="VIREX DDR5 RAM" loading="lazy">
+                            </div>
+                            <div class="product-body">
+                                <div class="product-number">03 / MEMORY</div>
+                                <h3 class="product-title">VIREX DDR5 RAM</h3>
+                                <p class="product-desc">Next-generation system memory engineered for smooth multitasking, gaming and performance-focused builds.</p>
+                                <div class="product-specs">
+                                    <span class="spec">DDR5</span>
+                                    <span class="spec">Gaming</span>
+                                    <span class="spec">Desktop</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="product-card">
+                            <div class="product-image">
+                                <span class="product-badge">Portable</span>
+                                <img src="Images/Portable SSD.png" alt="VIREX Portable SSD" loading="lazy">
+                            </div>
+                            <div class="product-body">
+                                <div class="product-number">04 / EXTERNAL</div>
+                                <h3 class="product-title">VIREX Portable SSD</h3>
+                                <p class="product-desc">Take your files, projects and media with you in a compact external storage solution built for mobility.</p>
+                                <div class="product-specs">
+                                    <span class="spec">Portable</span>
+                                    <span class="spec">External</span>
+                                    <span class="spec">Fast Transfer</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="product-card">
+                            <div class="product-image">
+                                <span class="product-badge">Flash</span>
+                                <img src="Images/SD Card 32.png" alt="VIREX SDXC Memory Card" loading="lazy">
+                            </div>
+                            <div class="product-body">
+                                <div class="product-number">05 / FLASH</div>
+                                <h3 class="product-title">VIREX SDXC</h3>
+                                <p class="product-desc">A compact storage option for cameras, devices and users who need reliable everyday flash memory.</p>
+                                <div class="product-specs">
+                                    <span class="spec">SDXC</span>
+                                    <span class="spec">Compact</span>
+                                    <span class="spec">Reliable</span>
+                                </div>
+                            </div>
+                        </article>
+
+                    </div>
+
+                    <div class="slider-footer">
+                        <div class="slider-dots" id="sliderDots" aria-label="Choose product slide"></div>
+                        <div class="slider-controls" aria-label="Product slider controls">
+                            <button class="slider-btn" id="prevProduct" aria-label="Previous products">←</button>
+                            <button class="slider-btn" id="nextProduct" aria-label="Next products">→</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PERFORMANCE -->
+        <section id="performance" class="performance">
+            <div class="container performance-grid">
+                <div class="performance-copy reveal">
+                    <span class="kicker">Engineered for the workload</span>
+                    <h2 class="section-title">Built to <span>Keep Up</span></h2>
+                    <p>
+                        Whether you're loading a game, editing high-resolution footage,
+                        moving large project files or simply demanding more from your PC,
+                        memory performance matters. VIREX focuses on the storage and memory
+                        components that keep your digital experience moving.
+                    </p>
+                </div>
+
+                <div class="performance-list reveal delay-1">
+                    <div class="performance-row">
+                        <div class="performance-icon">01</div>
+                        <div><strong>Gaming Performance</strong><span>Responsive storage and system memory for demanding setups.</span></div>
+                        <b>READY</b>
+                    </div>
+                    <div class="performance-row">
+                        <div class="performance-icon">02</div>
+                        <div><strong>Content Creation</strong><span>Move projects and media efficiently across your workflow.</span></div>
+                        <b>PRO</b>
+                    </div>
+                    <div class="performance-row">
+                        <div class="performance-icon">03</div>
+                        <div><strong>Everyday Productivity</strong><span>Keep applications, files and multitasking moving smoothly.</span></div>
+                        <b>FAST</b>
+                    </div>
+                    <div class="performance-row">
+                        <div class="performance-icon">04</div>
+                        <div><strong>Portable Workflows</strong><span>Compact storage for work, travel and creative mobility.</span></div>
+                        <b>MOBILE</b>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about">
+            <div class="container about-grid">
+                <div class="about-copy reveal">
+                    <span class="kicker">The VIREX Philosophy</span>
+                    <h2 class="section-title">Memory Without <span>Limits</span></h2>
+
+                    <p>
+                        At VIREX, we believe digital boundaries are meant to be pushed.
+                        Our product range is built around a simple idea: your hardware should
+                        never feel like the thing holding your ambition back.
+                    </p>
+                    <p>
+                        From next-generation RAM to high-speed SSDs and portable flash storage,
+                        VIREX brings performance-focused memory solutions to gamers, creators,
+                        professionals and everyday technology users.
+                    </p>
+
+                    <div class="about-cards">
+                        <div class="about-card">
+                            <b>Performance Focused</b>
+                            <span>Products selected around speed, responsiveness and modern workloads.</span>
+                        </div>
+                        <div class="about-card">
+                            <b>Modern Hardware</b>
+                            <span>Memory and storage solutions aligned with today's devices and workflows.</span>
+                        </div>
+                        <div class="about-card">
+                            <b>Gaming Vibe</b>
+                            <span>A brand built around the energy of performance, competition and progress.</span>
+                        </div>
+                        <div class="about-card">
+                            <b>Future Ready</b>
+                            <span>Designed for users who want their technology to keep moving forward.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-visual reveal delay-1">
+                    <img src="Images/Virex Final 02 (1).png" alt="VIREX Memory Solutions">
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section id="contact" class="cta">
+            <div class="container">
+                <div class="cta-box reveal">
+                    <span class="kicker">Upgrade Your Experience</span>
+                    <h2>Ready to Go <span>Further?</span></h2>
+                    <p>
+                        Explore the VIREX range and find the memory or storage solution
+                        that matches your next build, next project or next level.
+                    </p>
+                    <a href="#products" class="btn">Explore VIREX</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-main">
+            <img src="Images/Virex Final 02 (1).png" alt="VIREX">
+            <div class="footer-copy">
+                VIREX Memory Solutions<br>
+                Store More. Access Faster. Live Limitless.
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 VIREX Memory Solutions. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        (() => {
+            const preloader = document.getElementById("preloader");
+            const navbar = document.getElementById("navbar");
+            const navToggle = document.getElementById("navToggle");
+            const navLinks = document.getElementById("navLinks");
+            const productTrack = document.getElementById("productTrack");
+            const prevProduct = document.getElementById("prevProduct");
+            const nextProduct = document.getElementById("nextProduct");
+            const sliderDots = document.getElementById("sliderDots");
+            const scrollProgress = document.getElementById("scrollProgress");
+            const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+            /* Preloader */
+            window.addEventListener("load", () => {
+                setTimeout(() => preloader?.classList.add("hidden"), 450);
+            });
+
+            /* Hero video performance */
+            const heroVideo = document.querySelector(".hero-video");
+
+            if (heroVideo) {
+                const syncHeroVideo = () => {
+                    if (document.hidden) {
+                        heroVideo.pause();
+                    } else if (heroVideo.paused) {
+                        heroVideo.play().catch(() => {});
+                    }
+                };
+
+                document.addEventListener("visibilitychange", syncHeroVideo);
+
+                /* Keep autoplay muted and inline on mobile browsers. */
+                heroVideo.muted = true;
+                heroVideo.playsInline = true;
+
+                /* Avoid forcing a large decoding workload before the page is ready. */
+                heroVideo.addEventListener("loadeddata", () => {
+                    if (!document.hidden) heroVideo.play().catch(() => {});
+                }, { once: true });
+            }
+
+            /* Navbar + scroll progress */
+            const updateScrollUI = () => {
+                navbar?.classList.toggle("scrolled", window.scrollY > 40);
+
+                if (scrollProgress) {
+                    const max = document.documentElement.scrollHeight - window.innerHeight;
+                    const progress = max > 0 ? (window.scrollY / max) * 100 : 0;
+                    scrollProgress.style.width = progress + "%";
+                }
+            };
+
+            updateScrollUI();
+            window.addEventListener("scroll", updateScrollUI, { passive: true });
+
+            /* Mobile navigation */
+            const closeMenu = () => {
+                navLinks?.classList.remove("open");
+                navToggle?.classList.remove("active");
+                navToggle?.setAttribute("aria-expanded", "false");
+                document.body.classList.remove("menu-open");
+            };
+
+            navToggle?.addEventListener("click", () => {
+                const open = navLinks.classList.toggle("open");
+                navToggle.classList.toggle("active", open);
+                navToggle.setAttribute("aria-expanded", String(open));
+                document.body.classList.toggle("menu-open", open);
+            });
+
+            navLinks?.querySelectorAll("a").forEach(link => link.addEventListener("click", closeMenu));
+
+            document.addEventListener("click", (event) => {
+                if (window.innerWidth <= 800 && navbar && !navbar.contains(event.target)) closeMenu();
+            });
+
+            window.addEventListener("resize", () => {
+                if (window.innerWidth > 800) closeMenu();
+                updateScrollUI();
+                requestAnimationFrame(updateActiveCard);
+            });
+
+            /* Reveal animations */
+            const revealItems = document.querySelectorAll(".reveal");
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("show");
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+
+            revealItems.forEach(item => observer.observe(item));
+
+            /* Subtle parallax for a more modern scroll feel */
+            const parallaxItems = document.querySelectorAll(".orb, .hero-glow, .hero-grid");
+            let parallaxTicking = false;
+
+            const updateParallax = () => {
+                if (reduceMotion.matches) return;
+                const y = window.scrollY;
+
+                parallaxItems.forEach((item, index) => {
+                    const speed = [0.03, -0.02, 0.025, 0.018][index] ?? 0.02;
+                    item.style.setProperty("--parallax-y", `${y * speed}px`);
+                    if (!item.classList.contains("section-parallax")) item.classList.add("section-parallax");
+                });
+
+                parallaxTicking = false;
+            };
+
+            window.addEventListener("scroll", () => {
+                if (!parallaxTicking) {
+                    requestAnimationFrame(updateParallax);
+                    parallaxTicking = true;
+                }
+            }, { passive: true });
+            updateParallax();
+
+            /* Product slider */
+            if (!productTrack) return;
+
+            const cards = [...productTrack.querySelectorAll(".product-card")];
+            let activeIndex = 0;
+            let autoSlideTimer = null;
+            let interactionTimer = null;
+            let isProductSectionVisible = false;
+            let isUserInteracting = false;
+
+            const getScrollAmount = () => {
+                const card = cards[0];
+                if (!card) return 350;
+                const styles = getComputedStyle(productTrack);
+                const gap = parseFloat(styles.columnGap || styles.gap) || 20;
+                return card.getBoundingClientRect().width + gap;
+            };
+
+            const getNearestCardIndex = () => {
+                const trackCenter = productTrack.scrollLeft + productTrack.clientWidth / 2;
+                let nearest = 0;
+                let smallestDistance = Infinity;
+
+                cards.forEach((card, index) => {
+                    const center = card.offsetLeft + card.offsetWidth / 2;
+                    const distance = Math.abs(trackCenter - center);
+                    if (distance < smallestDistance) {
+                        smallestDistance = distance;
+                        nearest = index;
+                    }
+                });
+
+                return nearest;
+            };
+
+            const goToCard = (index, behavior = "smooth") => {
+                if (!cards.length) return;
+
+                activeIndex = (index + cards.length) % cards.length;
+                productTrack.scrollTo({
+                    left: cards[activeIndex].offsetLeft,
+                    behavior: reduceMotion.matches ? "auto" : behavior
+                });
+
+                updateActiveCard(activeIndex);
+            };
+
+            const updateDots = () => {
+                [...sliderDots.children].forEach((dot, index) => {
+                    const active = index === activeIndex;
+                    dot.classList.toggle("is-active", active);
+                    dot.setAttribute("aria-current", String(active));
+                });
+            };
+
+            const updateActiveCard = (forcedIndex) => {
+                activeIndex = Number.isInteger(forcedIndex)
+                    ? forcedIndex
+                    : getNearestCardIndex();
+
+                cards.forEach((card, index) => {
+                    card.classList.toggle("is-active", index === activeIndex);
+                });
+
+                updateDots();
+            };
+
+            cards.forEach((_, index) => {
+                const dot = document.createElement("button");
+                dot.type = "button";
+                dot.className = "slider-dot";
+                dot.setAttribute("aria-label", `Go to product ${index + 1}`);
+                dot.addEventListener("click", () => {
+                    pauseAutoSlide();
+                    goToCard(index);
+                });
+                sliderDots.appendChild(dot);
+            });
+
+            let scrollTicking = false;
+            productTrack.addEventListener("scroll", () => {
+                if (!scrollTicking) {
+                    requestAnimationFrame(() => {
+                        updateActiveCard();
+                        scrollTicking = false;
+                    });
+                    scrollTicking = true;
+                }
+            }, { passive: true });
+
+            prevProduct?.addEventListener("click", () => {
+                pauseAutoSlide();
+                goToCard(activeIndex - 1);
+            });
+
+            nextProduct?.addEventListener("click", () => {
+                pauseAutoSlide();
+                goToCard(activeIndex + 1);
+            });
+
+            productTrack.addEventListener("keydown", (event) => {
+                if (event.key === "ArrowRight") {
+                    event.preventDefault();
+                    pauseAutoSlide();
+                    goToCard(activeIndex + 1);
+                }
+                if (event.key === "ArrowLeft") {
+                    event.preventDefault();
+                    pauseAutoSlide();
+                    goToCard(activeIndex - 1);
+                }
+            });
+
+            const autoSlideProducts = () => {
+                if (
+                    !isProductSectionVisible ||
+                    isUserInteracting ||
+                    document.hidden ||
+                    reduceMotion.matches
+                ) return;
+
+                goToCard(activeIndex + 1);
+            };
+
+            const startAutoSlide = () => {
+                clearInterval(autoSlideTimer);
+                if (!reduceMotion.matches && isProductSectionVisible) {
+                    autoSlideTimer = setInterval(autoSlideProducts, 3800);
+                }
+            };
+
+            const stopAutoSlide = () => clearInterval(autoSlideTimer);
+
+            const pauseAutoSlide = () => {
+                isUserInteracting = true;
+                stopAutoSlide();
+                clearTimeout(interactionTimer);
+
+                interactionTimer = setTimeout(() => {
+                    isUserInteracting = false;
+                    startAutoSlide();
+                }, 4500);
+            };
+
+            const productSection = document.getElementById("products");
+            if (productSection) {
+                new IntersectionObserver(entries => {
+                    isProductSectionVisible = entries[0].isIntersecting;
+                    if (isProductSectionVisible) startAutoSlide();
+                    else stopAutoSlide();
+                }, { threshold: 0.28 }).observe(productSection);
+            }
+
+            [productTrack, prevProduct, nextProduct].filter(Boolean).forEach(element => {
+                element.addEventListener("mouseenter", () => {
+                    isUserInteracting = true;
+                    stopAutoSlide();
+                });
+
+                element.addEventListener("mouseleave", () => {
+                    isUserInteracting = false;
+                    startAutoSlide();
+                });
+
+                element.addEventListener("touchstart", pauseAutoSlide, { passive: true });
+                element.addEventListener("pointerdown", pauseAutoSlide, { passive: true });
+            });
+
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) stopAutoSlide();
+                else startAutoSlide();
+            });
+
+            reduceMotion.addEventListener?.("change", () => {
+                if (reduceMotion.matches) {
+                    stopAutoSlide();
+                    if (heroVideo) heroVideo.pause();
+                } else {
+                    startAutoSlide();
+                    if (heroVideo && !document.hidden) heroVideo.play().catch(() => {});
+                }
+            });
+
+            updateActiveCard(0);
+
+            /* Subtle magnetic effect on primary buttons */
+            document.querySelectorAll(".btn").forEach(button => {
+                button.classList.add("magnetic");
+
+                button.addEventListener("mousemove", event => {
+                    if (window.matchMedia("(pointer: coarse)").matches || reduceMotion.matches) return;
+                    const rect = button.getBoundingClientRect();
+                    const x = event.clientX - rect.left - rect.width / 2;
+                    const y = event.clientY - rect.top - rect.height / 2;
+                    button.style.transform = `translate(${x * .10}px, ${y * .10}px)`;
+                });
+
+                button.addEventListener("mouseleave", () => {
+                    button.style.transform = "";
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
