@@ -709,7 +709,7 @@
         .reveal {
             opacity: 0;
             transform: translateY(35px);
-            transition: opacity .8s var(--ease), transform .8s var(--ease);
+            transition: opacity .65s var(--ease), transform .65s var(--ease);
         }
         .reveal.show { opacity: 1; transform: translateY(0); }
         .delay-1 { transition-delay: .08s; }
@@ -775,6 +775,13 @@
         }
         .product-card.is-active .product-image img{
             animation: productFloat 4s ease-in-out infinite;
+            will-change: transform;
+        }
+        @media (max-width: 900px), (pointer: coarse), (prefers-reduced-motion: reduce) {
+            .product-card.is-active .product-image img {
+                animation: none;
+                will-change: auto;
+            }
         }
         @keyframes productFloat {
             0%,100% { transform:translateY(0) scale(1.02); }
@@ -901,28 +908,40 @@
 
 
         /* ---------- Modern Scroll Experience ---------- */
+        /* ---------- Smooth, low-jank scrolling ---------- */
         html {
-            scroll-snap-type: y proximity;
             scroll-padding-top: 78px;
-        }
-
-        body {
-            overscroll-behavior-y: none;
-        }
-
-        main > section {
-            scroll-snap-align: start;
-            scroll-snap-stop: normal;
+            scroll-behavior: smooth;
         }
 
         .scroll-progress {
+            transform: scaleX(0);
             transform-origin: left center;
-            transition: width .08s linear;
+            transition: transform .12s linear;
+            will-change: transform;
         }
 
         .section-parallax {
-            will-change: transform;
             transform: translate3d(0, var(--parallax-y, 0px), 0);
+            will-change: transform;
+        }
+
+        /* Keep heavy visual effects off small/touch devices. */
+        @media (max-width: 900px), (pointer: coarse) {
+            .section-parallax {
+                transform: none !important;
+                will-change: auto;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
 
         /* Product slider status */
@@ -1029,7 +1048,7 @@
 
     <nav id="navbar">
         <a class="logo" href="#home" aria-label="VIREX Home">
-            <img src="Images/virex-wordmark (1).png" alt="VIREX">
+            <img src="Images/virex-wordmark.png" alt="VIREX" decoding="async" fetchpriority="high">
         </a>
 
         <div class="nav-links" id="navLinks">
@@ -1048,7 +1067,7 @@
     <main>
         <!-- HERO: Put your cinematic MP4 at Videos/virex-hero.mp4 -->
         <section id="home">
-            <video class="hero-video" autoplay muted loop playsinline preload="metadata" disablepictureinpicture
+            <video class="hero-video" autoplay muted loop playsinline preload="metadata" decoding="async" disablepictureinpicture
                    poster="Images/VIREX LOGO.png" aria-hidden="true">
                 <source src="Videos/Virex SD.mp4" type="video/mp4">
             </video>
@@ -1119,7 +1138,7 @@
                         <article class="product-card">
                             <div class="product-image">
                                 <span class="product-badge">Performance</span>
-                                <img src="Images/NVME.png" alt="VIREX NVMe M.2 SSD" loading="lazy">
+                                <img src="Images/NVME.png" alt="VIREX NVMe M.2 SSD" loading="lazy" decoding="async">
                             </div>
                             <div class="product-body">
                                 <div class="product-number">01 / STORAGE</div>
@@ -1133,27 +1152,12 @@
                             </div>
                         </article>
 
-                        <article class="product-card">
-                            <div class="product-image">
-                                <span class="product-badge">Creator</span>
-                                <img src="Images/SD Card.png" alt="VIREX PRO SDXC Memory Card" loading="lazy">
-                            </div>
-                            <div class="product-body">
-                                <div class="product-number">02 / FLASH</div>
-                                <h3 class="product-title">VIREX PRO SDXC</h3>
-                                <p class="product-desc">Portable flash storage designed for photography, video capture and demanding everyday transfers.</p>
-                                <div class="product-specs">
-                                    <span class="spec">SDXC</span>
-                                    <span class="spec">4K Ready</span>
-                                    <span class="spec">Portable</span>
-                                </div>
-                            </div>
-                        </article>
+                        
 
                         <article class="product-card">
                             <div class="product-image">
                                 <span class="product-badge">Gaming</span>
-                                <img src="Images/Virex Ram.png" alt="VIREX DDR5 RAM" loading="lazy">
+                                <img src="Images/Virex Ram.png" alt="VIREX DDR5 RAM" loading="lazy" decoding="async">
                             </div>
                             <div class="product-body">
                                 <div class="product-number">03 / MEMORY</div>
@@ -1170,7 +1174,7 @@
                         <article class="product-card">
                             <div class="product-image">
                                 <span class="product-badge">Portable</span>
-                                <img src="Images/Portable SSD.png" alt="VIREX Portable SSD" loading="lazy">
+                                <img src="Images/Portable SSD.png" alt="VIREX Portable SSD" loading="lazy" decoding="async">
                             </div>
                             <div class="product-body">
                                 <div class="product-number">04 / EXTERNAL</div>
@@ -1187,7 +1191,7 @@
                         <article class="product-card">
                             <div class="product-image">
                                 <span class="product-badge">Flash</span>
-                                <img src="Images/SD Card 32.png" alt="VIREX SDXC Memory Card" loading="lazy">
+                                <img src="Images/SD Card 32.png" alt="VIREX SDXC Memory Card" loading="lazy" decoding="async">
                             </div>
                             <div class="product-body">
                                 <div class="product-number">05 / FLASH</div>
@@ -1292,7 +1296,7 @@
                 </div>
 
                 <div class="about-visual reveal delay-1">
-                    <img src="Images/Virex Final 02 (1).png" alt="VIREX Memory Solutions">
+                    <img src="Images/Virex Final 02 (1).png" alt="VIREX Memory Solutions" loading="lazy" decoding="async">
                 </div>
             </div>
         </section>
@@ -1315,7 +1319,7 @@
 
     <footer>
         <div class="footer-main">
-            <img src="Images/Virex Final 02 (1).png" alt="VIREX">
+            <img src="Images/Virex Final 02 (1).png" alt="VIREX" loading="lazy" decoding="async">
             <div class="footer-copy">
                 VIREX Memory Solutions<br>
                 Store More. Access Faster. Live Limitless.
@@ -1348,39 +1352,66 @@
             const heroVideo = document.querySelector(".hero-video");
 
             if (heroVideo) {
-                const syncHeroVideo = () => {
-                    if (document.hidden) {
-                        heroVideo.pause();
-                    } else if (heroVideo.paused) {
-                        heroVideo.play().catch(() => {});
-                    }
-                };
-
-                document.addEventListener("visibilitychange", syncHeroVideo);
-
-                /* Keep autoplay muted and inline on mobile browsers. */
                 heroVideo.muted = true;
                 heroVideo.playsInline = true;
 
-                /* Avoid forcing a large decoding workload before the page is ready. */
-                heroVideo.addEventListener("loadeddata", () => {
-                    if (!document.hidden) heroVideo.play().catch(() => {});
-                }, { once: true });
+                const playHeroVideo = () => {
+                    if (document.hidden || reduceMotion.matches || navigator.connection?.saveData) {
+                        heroVideo.pause();
+                        return;
+                    }
+                    const promise = heroVideo.play();
+                    promise?.catch(() => {});
+                };
+
+                /* Decode/play only while the hero is actually visible. This prevents
+                   the video from competing with below-the-fold content during scroll. */
+                const heroObserver = new IntersectionObserver(([entry]) => {
+                    if (entry.isIntersecting) playHeroVideo();
+                    else heroVideo.pause();
+                }, { threshold: 0.05 });
+                heroObserver.observe(heroVideo);
+
+                document.addEventListener("visibilitychange", () => {
+                    if (document.hidden) heroVideo.pause();
+                    else playHeroVideo();
+                });
+
+                heroVideo.addEventListener("loadeddata", playHeroVideo, { once: true });
             }
 
-            /* Navbar + scroll progress */
+            /* One requestAnimationFrame loop handles all scroll UI work.
+               This avoids multiple independent scroll handlers fighting for frames. */
+            const parallaxItems = document.querySelectorAll(".orb, .hero-glow, .hero-grid");
+            parallaxItems.forEach(item => item.classList.add("section-parallax"));
+            let scrollTicking = false;
             const updateScrollUI = () => {
-                navbar?.classList.toggle("scrolled", window.scrollY > 40);
+                const y = window.scrollY;
+                navbar?.classList.toggle("scrolled", y > 40);
 
                 if (scrollProgress) {
-                    const max = document.documentElement.scrollHeight - window.innerHeight;
-                    const progress = max > 0 ? (window.scrollY / max) * 100 : 0;
-                    scrollProgress.style.width = progress + "%";
+                    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+                    scrollProgress.style.transform = `scaleX(${Math.min(1, Math.max(0, y / max))})`;
+                }
+
+                if (!reduceMotion.matches && window.innerWidth > 900 && !window.matchMedia("(pointer: coarse)").matches) {
+                    parallaxItems.forEach((item, index) => {
+                        const speed = [0.018, -0.012, 0.015, 0.01][index] ?? 0.012;
+                        item.style.setProperty("--parallax-y", `${y * speed}px`);
+                    });
+                }
+                scrollTicking = false;
+            };
+
+            const requestScrollUpdate = () => {
+                if (!scrollTicking) {
+                    scrollTicking = true;
+                    requestAnimationFrame(updateScrollUI);
                 }
             };
 
             updateScrollUI();
-            window.addEventListener("scroll", updateScrollUI, { passive: true });
+            window.addEventListener("scroll", requestScrollUpdate, { passive: true });
 
             /* Mobile navigation */
             const closeMenu = () => {
@@ -1406,7 +1437,7 @@
             window.addEventListener("resize", () => {
                 if (window.innerWidth > 800) closeMenu();
                 updateScrollUI();
-                requestAnimationFrame(updateActiveCard);
+                if (typeof updateActiveCard === "function") requestAnimationFrame(updateActiveCard);
             });
 
             /* Reveal animations */
@@ -1422,30 +1453,9 @@
 
             revealItems.forEach(item => observer.observe(item));
 
-            /* Subtle parallax for a more modern scroll feel */
-            const parallaxItems = document.querySelectorAll(".orb, .hero-glow, .hero-grid");
-            let parallaxTicking = false;
-
-            const updateParallax = () => {
-                if (reduceMotion.matches) return;
-                const y = window.scrollY;
-
-                parallaxItems.forEach((item, index) => {
-                    const speed = [0.03, -0.02, 0.025, 0.018][index] ?? 0.02;
-                    item.style.setProperty("--parallax-y", `${y * speed}px`);
-                    if (!item.classList.contains("section-parallax")) item.classList.add("section-parallax");
-                });
-
-                parallaxTicking = false;
-            };
-
-            window.addEventListener("scroll", () => {
-                if (!parallaxTicking) {
-                    requestAnimationFrame(updateParallax);
-                    parallaxTicking = true;
-                }
-            }, { passive: true });
-            updateParallax();
+            /* Subtle parallax for a modern scroll feel.
+               The actual values are updated inside the single scroll rAF above. */
+            updateScrollUI();
 
             /* Product slider */
             if (!productTrack) return;
@@ -1526,14 +1536,14 @@
                 sliderDots.appendChild(dot);
             });
 
-            let scrollTicking = false;
+            let productScrollTicking = false;
             productTrack.addEventListener("scroll", () => {
-                if (!scrollTicking) {
+                if (!productScrollTicking) {
                     requestAnimationFrame(() => {
                         updateActiveCard();
-                        scrollTicking = false;
+                        productScrollTicking = false;
                     });
-                    scrollTicking = true;
+                    productScrollTicking = true;
                 }
             }, { passive: true });
 
